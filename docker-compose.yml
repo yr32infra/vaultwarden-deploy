@@ -1,0 +1,64 @@
+version: '3.9'
+services:
+  vaultwarden:
+    image: vaultwarden/server:1.26.0@sha256:2c56fa96c27fb541f0318d8d3253c3acf5a418792d21994718fc72da6382570a
+    hostname: vaultwarden
+    container_name: vaultwarden__vaultwarden
+    restart: unless-stopped
+
+    environment:
+      SIGNUPS_ALLOWED: 'false'
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
+
+    volumes:
+      - type: volume
+        source: vaultwarden_data
+        target: /data
+
+    expose:
+      - 80
+
+    networks:
+      - outband
+
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  cloudflared:
+    image: cloudflare/cloudflared:2022.10.3@sha256:d3840dadf665098fa7307aeec68f1ce8802437559cb06cf3863afcf963a02f6d
+    hostname: cloudflared
+    container_name: vaultwarden__cloudflared
+    restart: unless-stopped
+
+    environment:
+      TUNNEL_METRICS: 0.0.0.0:9126
+      TUNNEL_LOGFILE: /dev/stdout
+
+    command: tunnel run --token ${TUNNEL_TOKEN}
+
+    networks:
+      outband:
+      prometheus__cloudflared:
+        aliases:
+          - vaultwarden__cloudflared
+
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+volumes:
+  vaultwarden_data:
+    name: vaultwarden__vaultwarden_data
+  mariadb_data:
+    name: vaultwarden__mariadb_data
+
+networks:
+  outband:
+    name: vaultwarden__outband
+
+  prometheus__cloudflared:
+    name: prometheus__cloudflared 
+    external: true
