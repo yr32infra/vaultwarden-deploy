@@ -27,7 +27,7 @@ services:
           memory: 256m
 
   cloudflared:
-    image: cloudflare/cloudflared:2022.11.0@sha256:807f9b7516e9892cfc3c2c0eecd71a99ac9aef1649b771c2bff868241a86eb04
+    image: cloudflare/cloudflared:2022.11.1@sha256:cff8de53a74cf5b7f8d9b209b9c03d1b35c0a96c037d0999e036808c7481c05b
     hostname: cloudflared
     container_name: vaultwarden__cloudflared
     restart: unless-stopped
