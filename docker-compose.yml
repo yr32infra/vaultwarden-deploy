@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   vaultwarden:
-    image: vaultwarden/server:1.26.0@sha256:2c56fa96c27fb541f0318d8d3253c3acf5a418792d21994718fc72da6382570a
+    image: vaultwarden/server:1.27.0@sha256:4ac5552b21a0fff9470f6b88a804ffd107ca4302cb3ff1078235ea9dc09e7e83
     hostname: vaultwarden
     container_name: vaultwarden__vaultwarden
     restart: unless-stopped
